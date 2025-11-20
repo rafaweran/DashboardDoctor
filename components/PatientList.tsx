@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Patient, UrgencyLevel, AISummary } from '../types';
-import { Video, Clock, Sparkles, X, FileText } from 'lucide-react';
+import { Video, Clock, Sparkles, X, FileText, AlertTriangle, CheckCircle } from 'lucide-react';
 import { analyzePatientSymptoms } from '../services/geminiService';
 
 const MOCK_PATIENTS: Patient[] = [
@@ -40,18 +40,40 @@ const PatientList: React.FC = () => {
       riskScore: 9
     }
   });
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    title: string;
+    message: string;
+    type: 'danger' | 'success';
+  } | null>(null);
 
   const handleAnalyze = async (patient: Patient) => {
     if (analysisResults[patient.id]) {
-        // Toggle off if already exists? Or just show. 
-        // For this demo, let's just let it stay or maybe re-analyze.
         return; 
     }
 
     setAnalyzingId(patient.id);
+    
+    // Simulate network/processing delay for realism if needed, but Gemini is fast enough
     const result = await analyzePatientSymptoms(patient);
+    
     setAnalysisResults(prev => ({ ...prev, [patient.id]: result }));
     setAnalyzingId(null);
+
+    // Real-time High Risk Notification Logic
+    if (result.riskScore >= 8) {
+      setNotification({
+        show: true,
+        title: 'ALERTA MÉDICO: Alto Risco Identificado',
+        message: `A IA detectou sinais críticos no paciente ${patient.name} (Risco: ${result.riskScore}/10). Atenção imediata recomendada.`,
+        type: 'danger'
+      });
+
+      // Auto dismiss after 8 seconds
+      setTimeout(() => {
+        setNotification(prev => prev?.show ? null : prev);
+      }, 8000);
+    }
   };
 
   const dismissAnalysis = (id: string) => {
@@ -61,7 +83,37 @@ const PatientList: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full relative">
+      
+      {/* Real-time Notification Toast */}
+      {notification && notification.show && (
+        <div className="absolute top-4 left-4 right-4 z-50 animate-in slide-in-from-top-4 fade-in duration-300">
+          <div className={`p-4 rounded-xl shadow-lg border-l-4 flex items-start gap-3 backdrop-blur-sm ${
+            notification.type === 'danger' 
+              ? 'bg-red-50/95 border-red-500 text-red-900' 
+              : 'bg-green-50/95 border-green-500 text-green-900'
+          }`}>
+            {notification.type === 'danger' ? (
+              <AlertTriangle className="shrink-0 text-red-600 mt-0.5" size={20} />
+            ) : (
+              <CheckCircle className="shrink-0 text-green-600 mt-0.5" size={20} />
+            )}
+            <div className="flex-1">
+              <h4 className="font-bold text-sm mb-0.5">{notification.title}</h4>
+              <p className="text-xs opacity-90 leading-relaxed">{notification.message}</p>
+            </div>
+            <button 
+              onClick={() => setNotification(null)}
+              className={`p-1 rounded-full hover:bg-black/5 transition-colors ${
+                notification.type === 'danger' ? 'text-red-700' : 'text-green-700'
+              }`}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="p-6 border-b border-gray-100 flex justify-between items-center">
         <div className="flex items-center gap-2">
            <h2 className="text-lg font-bold text-gray-800">Aguardando Teleorientação</h2>
