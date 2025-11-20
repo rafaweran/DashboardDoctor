@@ -1,3 +1,4 @@
+
 export enum UrgencyLevel {
   URGENT = 'Urgente',
   STANDARD = 'Padrão',
@@ -31,4 +32,23 @@ export interface AISummary {
   summary: string;
   suggestedAction: string;
   riskScore: number; // 1-10
+}
+
+// Chat Types
+export interface ChatContact {
+  id: string;
+  name: string;
+  avatar: string;
+  lastMessage: string;
+  timestamp: string;
+  unreadCount: number;
+  status: 'online' | 'offline';
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  timestamp: string;
+  isMe: boolean;
 }

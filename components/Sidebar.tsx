@@ -1,13 +1,19 @@
+
 import React from 'react';
 import { LayoutDashboard, MessageSquare, Calendar, Wallet, Settings, Users, LogOut } from 'lucide-react';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  activeView: string;
+  onNavigate: (view: string) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ activeView, onNavigate }) => {
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Home', active: true },
-    { icon: Users, label: 'Pacientes', active: false },
-    { icon: MessageSquare, label: 'Chat', active: false },
-    { icon: Calendar, label: 'Agenda', active: false },
-    { icon: Wallet, label: 'Financeiro', active: false },
+    { icon: LayoutDashboard, label: 'Home', id: 'home' },
+    { icon: Users, label: 'Pacientes', id: 'patients' },
+    { icon: MessageSquare, label: 'Chat', id: 'chat' },
+    { icon: Calendar, label: 'Agenda', id: 'agenda' },
+    { icon: Wallet, label: 'Financeiro', id: 'financeiro' },
   ];
 
   return (
@@ -20,9 +26,10 @@ const Sidebar: React.FC = () => {
       <nav className="flex-1 px-4 py-4 space-y-2">
         {menuItems.map((item) => (
           <button
-            key={item.label}
+            key={item.id}
+            onClick={() => onNavigate(item.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-              item.active
+              activeView === item.id
                 ? 'bg-teal-50 text-teal-700 font-medium'
                 : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
             }`}
