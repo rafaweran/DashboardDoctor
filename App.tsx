@@ -8,6 +8,7 @@ import InviteCard from './components/InviteCard';
 import ConnectionStatsCard from './components/ConnectionStatsCard';
 import ChatPage from './components/ChatPage';
 import PatientsPage from './components/PatientsPage';
+import AvailabilityWidget from './components/AvailabilityWidget';
 import { Users, Activity } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -25,10 +26,13 @@ const App: React.FC = () => {
             <main className="flex-1 overflow-y-auto p-8">
               <div className="max-w-7xl mx-auto space-y-8">
                 
-                {/* Header Text */}
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-800 mb-2">Bom dia, Dra. Amanda 👋</h1>
-                  <p className="text-gray-500">Aqui está o resumo dos seus atendimentos hoje.</p>
+                {/* Header Text and Availability Toggle */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2">Bom dia, Dra. Amanda 👋</h1>
+                    <p className="text-gray-500">Aqui está o resumo dos seus atendimentos hoje.</p>
+                  </div>
+                  <AvailabilityWidget />
                 </div>
                 
                 {/* Top Section: Grid for Stats/Invite and Finance */}
