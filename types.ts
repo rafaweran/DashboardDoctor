@@ -15,6 +15,18 @@ export interface Patient {
   email?: string;
 }
 
+export interface DirectoryPatient {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  age: number;
+  gender: 'Masculino' | 'Feminino' | 'Outro';
+  phone: string;
+  lastVisit: string;
+  status: 'Ativo' | 'Inativo';
+}
+
 export interface Metric {
   label: string;
   value: string | number;

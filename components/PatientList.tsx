@@ -30,7 +30,11 @@ const MOCK_PATIENTS: Patient[] = [
   }
 ];
 
-const PatientList: React.FC = () => {
+interface PatientListProps {
+  title?: string;
+}
+
+const PatientList: React.FC<PatientListProps> = ({ title }) => {
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<UrgencyLevel | 'ALL'>('ALL');
   
@@ -124,7 +128,7 @@ const PatientList: React.FC = () => {
       <div className="p-6 pb-4 border-b border-gray-50">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-             <h2 className="text-lg font-bold text-gray-800">Aguardando Teleorientação</h2>
+             <h2 className="text-lg font-bold text-gray-800">{title || "Aguardando Teleorientação"}</h2>
              <span className="bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full text-xs font-bold">{filteredPatients.length}</span>
           </div>
           <button className="text-teal-600 text-sm font-medium hover:underline">Ver todos</button>

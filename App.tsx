@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -8,6 +7,7 @@ import PatientList from './components/PatientList';
 import InviteCard from './components/InviteCard';
 import ConnectionStatsCard from './components/ConnectionStatsCard';
 import ChatPage from './components/ChatPage';
+import PatientsPage from './components/PatientsPage';
 import { Users, Activity } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -78,8 +78,12 @@ const App: React.FC = () => {
           <ChatPage />
         )}
 
+        {activeView === 'patients' && (
+          <PatientsPage />
+        )}
+
         {/* Placeholder for other views */}
-        {(activeView !== 'home' && activeView !== 'chat') && (
+        {(activeView !== 'home' && activeView !== 'chat' && activeView !== 'patients') && (
            <div className="flex-1 flex items-center justify-center text-gray-400">
               <div className="text-center">
                 <p className="text-lg font-medium">Página em construção</p>
